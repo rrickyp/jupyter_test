@@ -1,94 +1,71 @@
-import Image from 'next/image'
+'use client';
 import styles from './page.module.css'
+import { StrictMode } from "react";
+import { createRoot } from "react-dom/client";
+import { Cell, Jupyter } from "@datalayer/jupyter-react";
+import { useEffect } from 'react';
+import React from 'react';
+const code = `import numpy as np
+import matplotlib.pyplot as plt
 
+# Define the function P(Q) = 100Q - Q^2
+def P(Q):
+    return 100 * Q - Q**2
+
+# Define the derivative P'(Q) = 100 - 2Q
+def P_prime(Q):
+    return 100 - 2 * Q
+
+# Generate a range of values for Q
+Q_values = np.linspace(0, 100, 100)  # Choose any suitable range here
+
+# Calculate the corresponding values of P(Q) and P'(Q)
+P_values = P(Q_values)
+P_prime_values = P_prime(Q_values)
+
+# Plot the graph of P(Q)
+plt.plot(Q_values, P_values, label='P(Q) = 100Q - Q^2')
+
+# Calculate the tangent line equation at Q = 3
+a = 3
+tangent_line = P(a) + P_prime(a) * (Q_values - a)
+
+# Plot the tangent line
+plt.plot(Q_values, tangent_line, label='Tangent line at Q = 3', linestyle='dashed')
+
+# Highlight Q = 3 on the graph
+plt.scatter(a, P(a), color='red', label='Q = 3')
+
+plt.xlabel('Q')
+plt.ylabel('P(Q)')
+plt.title('Graph of P(Q) and Tangent Line at Q = 3')
+plt.legend()
+plt.grid(True)
+
+# plt.show()`
 export default function Home() {
+  const [isLoaded, setIsLoaded] = React.useState(false);
+  useEffect(() => {
+    if(!isLoaded) {
+      setIsLoaded(true);
+  if(document.getElementById("root") != null) {
+    setIsLoaded(true);
+  createRoot(document.getElementById("root") as HTMLElement).render(
+  <StrictMode>
+    <Jupyter>
+      <div>A Jupyter Cells</div>
+      <Cell source={code}/>
+    </Jupyter>
+  </StrictMode>
+
+);
+
+  }
+    }
+  });
   return (
     <main className={styles.main}>
-      <div className={styles.description}>
-        <p>
-          Get started by editing&nbsp;
-          <code className={styles.code}>src/app/page.tsx</code>
-        </p>
-        <div>
-          <a
-            href="https://vercel.com?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            By{' '}
-            <Image
-              src="/vercel.svg"
-              alt="Vercel Logo"
-              className={styles.vercelLogo}
-              width={100}
-              height={24}
-              priority
-            />
-          </a>
-        </div>
-      </div>
-
-      <div className={styles.center}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
-      </div>
-
-      <div className={styles.grid}>
-        <a
-          href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Docs <span>-&gt;</span>
-          </h2>
-          <p>Find in-depth information about Next.js features and API.</p>
-        </a>
-
-        <a
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Learn <span>-&gt;</span>
-          </h2>
-          <p>Learn about Next.js in an interactive course with&nbsp;quizzes!</p>
-        </a>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Templates <span>-&gt;</span>
-          </h2>
-          <p>Explore the Next.js 13 playground.</p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className={styles.card}
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2>
-            Deploy <span>-&gt;</span>
-          </h2>
-          <p>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+      <div className={styles.description} id="root">
       </div>
     </main>
   )
